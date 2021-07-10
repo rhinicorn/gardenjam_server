@@ -5,10 +5,10 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs")
 
 router.post('/register', async (req, res) => {
-    let { email, password } = req.body.user;
+    let { username, password } = req.body.user;
     try {
         const User = await UserModel.create({
-            email,
+            username,
             password: bcrypt.hashSync(password, 13),
         });
 
@@ -22,7 +22,7 @@ router.post('/register', async (req, res) => {
     } catch (err) {
         if (err instanceof UniqueContraintError) {
             res.status(409).json({
-                message: "Email already in use",
+                message: "Username already in use",
             });
         } else {
             res.status(500).json({
@@ -33,12 +33,12 @@ router.post('/register', async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-    let { email, password } = req.body.user;
+    let { username, password } = req.body.user;
 
     try {
         const loginUser = await UserModel.findOne({
             where: {
-                email: email,
+                username: username,
             },
         });
 
@@ -57,13 +57,13 @@ router.post("/login", async (req, res) => {
                 });
             } else {
                 res.status(401), json({
-                    message: "Incorrect email or password"
+                    message: "Incorrect username or password"
                 })
             }
 
         } else {
             res.status(401).json({
-                message: "Incorrect email or password!"
+                message: "Incorrect username or password!"
             })
         }
     } catch (error) {
