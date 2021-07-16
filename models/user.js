@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize")
-const db = require("./db")
+const db = require("../db")
 
 const User = db.define("user", {
     username: {
@@ -9,8 +9,8 @@ const User = db.define("user", {
     },
     password: {
         type: DataTypes.STRING,
-        allosNull: false,
-    },
+        allowNull: false,
+    }
 })
 
 module.exports = User
