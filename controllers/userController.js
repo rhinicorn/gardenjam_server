@@ -49,7 +49,7 @@ router.post("/login", async (req, res) => {
 
             if (passwordComparison) {
 
-                let token = jwt.sign({ id: loginUser.id }, process.env.JWT_SECRET, { expiresIn: 60 * 60 * 24 });
+                let token = jwt.sign({ id: loginUser.id }, "i_am_secret", { expiresIn: 60 * 60 * 24 });
 
                 res.status(200).json({
                     user: loginUser,
