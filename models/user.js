@@ -9,8 +9,8 @@ const User = db.define("user", {
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false,
-    },
+        allowNull: false
+    }
 })
 
 module.exports = User;
