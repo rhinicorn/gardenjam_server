@@ -1,13 +1,13 @@
 const router = require("express").Router();
-const { User } = require("../models");
-const { UniqueContraintError } = require("sequelize/lib/errors");
+const { UserModel } = require("../models");
+const { UniqueConstraintError } = require("sequelize/lib/errors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs")
 
 router.post('/register', async (req, res) => {
     let { username, password } = req.body.user;
     try {
-        const User = await User.create({
+        const User = await UserModel.create({
             username,
             password: bcrypt.hashSync(password, 13),
         });
@@ -16,11 +16,11 @@ router.post('/register', async (req, res) => {
 
         res.status(201).json({
             message: "User successfully registered!",
-            user: User,
+            user: UserModel,
             sessionToken: token
         });
     } catch (err) {
-        if (err instanceof UniqueContraintError) {
+        if (err instanceof UniqueConstraintError) {
             res.status(409).json({
                 message: "Username already in use",
             });
@@ -32,11 +32,12 @@ router.post('/register', async (req, res) => {
     }
 });
 
+
 router.post("/login", async (req, res) => {
     let { username, password } = req.body.user;
 
     try {
-        const loginUser = await User.findOne({
+        const loginUser = await UserModel.findOne({
             where: {
                 username: username,
             },
@@ -48,7 +49,7 @@ router.post("/login", async (req, res) => {
 
             if (passwordComparison) {
 
-                let token = jwt.sign({ id: loginUser.id }, process.env.JWT_SECRET, { expiresIn: 60 * 60 * 24 });
+                let token = jwt.sign({ id: loginUser.id }, "i_am_secret", { expiresIn: 60 * 60 * 24 });
 
                 res.status(200).json({
                     user: loginUser,

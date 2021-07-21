@@ -9,8 +9,8 @@ const User = db.define("user", {
     },
     password: {
         type: DataTypes.STRING,
-        allosNull: false,
-    },
+        allowNull: false
+    }
 })
 
-module.exports = User
+module.exports = User;
