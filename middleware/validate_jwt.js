@@ -9,7 +9,7 @@ const validateJWT = async (req, res, next) => {
         req.headers.authorization.includes("Bearer")
     ) {
         const { authorization } = req.headers;
-        const payload = authorization
+        const payload = authorization ? jwt.verify(authorization, process.env.JWT_SECRET) : undefined
             ? jwt.verify(
                 authorization.includes("Bearer")
                     ? authorization.split(" ")[1]
