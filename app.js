@@ -10,8 +10,6 @@ const cors = require('cors');
 app.use(require('./middleware/headers'));
 app.use(cors());
 
-const controllers = require("./controllers")
-
 app.use(Express.json());
 
 app.use("/user", controllers.userController);
