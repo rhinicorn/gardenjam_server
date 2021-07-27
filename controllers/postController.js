@@ -2,14 +2,9 @@ const router = require("express").Router();
 const { PostModel } = require("../models");
 const validateJWT = require("../middleware/validate_jwt")
 
-router.get('/test', validateJWT, async(req, res) => {
-    res.send('this is test')
-})
-
 router.post('/createPost', validateJWT, async (req, res) => {
     let { title, content, comments } = req.body.post;
     const { username } = req.user
-    console.log(username)
     const postEntry = {
         title,
         content,
