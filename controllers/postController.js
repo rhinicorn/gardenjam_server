@@ -10,7 +10,7 @@ router.get('/test', validateJWT, async(req, res) => {
 })
 
 router.post('/createPost', validateJWT, async (req, res) => {
-    let { title, content, comments } = req.body.user;
+    let { title, content, comments } = req.body.post;
     const { username } = req.user
     console.log(username)
     const postEntry = {
@@ -25,7 +25,6 @@ router.post('/createPost', validateJWT, async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err })
     }
-    Post.create(postEntry)
 });
 
 router.put('/update/:entryId', validateJWT, async (req, res) => {
