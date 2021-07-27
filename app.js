@@ -14,13 +14,8 @@ const controllers = require("./controllers")
 
 app.use(Express.json());
 
-<<<<<<< HEAD
-
-app.use("/post", controllers.postController)
-=======
 app.use("/user", controllers.userController);
 app.use("/post", controllers.postController);
->>>>>>> 4de267ddb6b038b0ee90c3d7edcf117056803f76
 
 dbConnection.authenticate()
   .then(() => dbConnection.sync())
