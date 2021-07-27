@@ -1,26 +1,22 @@
 const router = require("express").Router();
-const { Post } = require("../models");
-// const { UniqueConstraintError } = require("sequelize/lib/errors");
-const jwt = require("jsonwebtoken");
-// const bcrypt = require("bcryptjs");
+const { PostModel } = require("../models");
 const validateJWT = require("../middleware/validate_jwt")
 
 router.post('/createPost', validateJWT, async (req, res) => {
-    let { title, content, comments, postName } = req.body.user;
-    // const { username } = req.user
+    let { title, content, comments } = req.body.post;
+    const { username } = req.user
     const postEntry = {
         title,
         content,
         comments,
-        postName
+        postName: username
     }
     try {
-        const newPost = await Post.create(postEntry)
+        const newPost = await PostModel.create(postEntry)
         res.status(200).json(newPost)
     } catch (err) {
         res.status(500).json({ error: err })
     }
-    Post.create(postEntry)
 });
 
 router.put('/update/:entryId', validateJWT, async (req, res) => {

@@ -5,7 +5,6 @@ const Post = db.define("post", {
     title: {
         type: DataTypes.STRING(100),
         allowNull: false,
-        unique: true
     },
     content: {
         type: DataTypes.STRING,
