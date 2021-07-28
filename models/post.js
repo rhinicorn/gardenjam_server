@@ -5,11 +5,10 @@ const Post = db.define("post", {
     title: {
         type: DataTypes.STRING(100),
         allowNull: false,
-        unique: true
     },
     content: {
         type: DataTypes.STRING,
-        allosNull: false,
+        allowNull: false,
     },
     comments: {
         type: DataTypes.STRING,
@@ -18,6 +17,9 @@ const Post = db.define("post", {
     postName: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    owner: {
+        type: DataTypes.INTEGER
     }
 
 })

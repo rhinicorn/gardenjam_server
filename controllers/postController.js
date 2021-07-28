@@ -1,59 +1,74 @@
 const router = require("express").Router();
-const { Post } = require("../models");
-// const { UniqueConstraintError } = require("sequelize/lib/errors");
-const jwt = require("jsonwebtoken");
-// const bcrypt = require("bcryptjs");
+const { PostModel } = require("../models");
 const validateJWT = require("../middleware/validate_jwt")
 
 router.post('/createPost', validateJWT, async (req, res) => {
-    let { title, content, comments, postName } = req.body.user;
-    // const { username } = req.user
+    let { title, content, comments } = req.body.post;
+    const { username, id } = req.user
     const postEntry = {
         title,
         content,
         comments,
-        postName
+        postName: username,
+        owner: id
     }
     try {
-        const newPost = await Post.create(postEntry)
+        const newPost = await PostModel.create(postEntry)
         res.status(200).json(newPost)
     } catch (err) {
         res.status(500).json({ error: err })
     }
-    Post.create(postEntry)
 });
 
-router.put('/update/:entryId', validateJWT, async (req, res) => {
-    const { title, content, comments, postname } = req.body.post
-    const postId = req.params.entryId
-    const userId = req.user.id;
+router.get("/all", async (req, res) => {
+    try {
+        const entries = await PostModel.findAll();
+        res.status(200).json(entries);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+});
 
+router.get("/mine", validateJWT, async (req, res) => {
+    const userId = req.user.id;
+    try {
+        const userPosts = await PostModel.findAll({
+            where: {
+                owner: userId
+            }
+        });
+        res.status(200).json(userPosts);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+});
+
+router.put('/update/:id', validateJWT, async (req, res) => {
+    const { title, content, comments, postName } = req.body.post
+    const postId = req.params.id
+    const userId = req.user.id;
     const query = {
         where: {
             id: postId,
             owner: userId
         }
     }
-
-    const updatePost = {
+    const updatedPost = {
         title: title,
         content: content,
         comments: comments,
-        postname: postname
+        postName: postName
     }
-
     try {
-        const update = await Post.update(updatedPost, query)
+        const update = await PostModel.update(updatedPost, query)
         res.status(200).json(update)
     } catch (err){
         res.status(500).json({ error: err })
     }
 })
-
 router.delete("/delete/:id", validateJWT, async (req, res) => {
     const ownerId = req.user.id
     const postId = req.params.id
-
     try {
         const query = {
             where: {
@@ -61,8 +76,7 @@ router.delete("/delete/:id", validateJWT, async (req, res) => {
                 owner: ownerId
             }
         }
-
-        await Post.destroy(query)
+        await PostModel.destroy(query)
         res.status(200).json({ message: "Post Entry Removed"})
     } catch (err) {
         res.status(500).json({ error: err})
