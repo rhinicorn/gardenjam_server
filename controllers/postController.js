@@ -82,4 +82,5 @@ router.delete("/delete/:id", validateJWT, async (req, res) => {
         res.status(500).json({ error: err})
     }
 })
+
 module.exports = router;
