@@ -10,6 +10,7 @@ const cors = require('cors');
 app.use(require('./middleware/headers'));
 app.use(cors());
 
+
 app.use(Express.json());
 
 app.use("/user", controllers.userController);
