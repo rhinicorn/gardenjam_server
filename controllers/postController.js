@@ -45,8 +45,10 @@ router.get("/mine", validateJWT, async (req, res) => {
 
 router.put('/update/:id', validateJWT, async (req, res) => {
     const { title, content, comments, postName } = req.body.post
+    console.log(title)
     const postId = req.params.id
     const userId = req.user.id;
+    console.log(userId)
     const query = {
         where: {
             id: postId,
@@ -61,6 +63,7 @@ router.put('/update/:id', validateJWT, async (req, res) => {
     }
     try {
         const update = await PostModel.update(updatedPost, query)
+        console.log(update)
         res.status(200).json(update)
     } catch (err){
         res.status(500).json({ error: err })
